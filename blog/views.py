@@ -9,5 +9,5 @@ def index(request):
 
 
 def blogPost(request,slug):
-    return HttpResponse(f'this is blog {slug}')
-    # return render(request, 'blog/index.html')
+    # return HttpResponse(f'this is blog {slug}')
+    return render(request, 'blog/blogpost.html',{'params':slug})
