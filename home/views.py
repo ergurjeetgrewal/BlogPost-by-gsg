@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Contact
 from django.contrib import messages
+from blog.models import Post
 # Create your views here.
 
 
@@ -27,3 +28,9 @@ def contact(request):
             messages.success(request,"Your Form has been sent successfully")
         return render(request, 'home/contactus.html')
     return render(request, 'home/contactus.html')
+
+def search(request):
+    query = request.GET['search']
+    allposts=Post.objects.filter(title__icontains=query)
+    params={'allPosts':allposts}
+    return render(request, 'home/search.html',params)
