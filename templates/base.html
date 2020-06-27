@@ -72,13 +72,13 @@
             <form>
               <div class="form-group">
                 <label for="lemail">Email address</label>
-                <input type="email" class="form-control" id="lemail" aria-describedby="emailHelp">
+                <input type="email" Required class="form-control" id="lemail" aria-describedby="emailHelp">
                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                   else.</small>
               </div>
               <div class="form-group">
                 <label for="lpassword">Password</label>
-                <input type="password" class="form-control" id="lpassword">
+                <input type="password" Required class="form-control" id="lpassword">
               </div>
               <button type="submit" class="btn btn-primary">Login</button>
             </form>
@@ -98,37 +98,47 @@
             </button>
           </div>
           <div class="modal-body">
-            <form>
+            <form method="POST" action="/signup">
+              {% csrf_token %}
               <div class="form-group">
                 <label for="Username">Username</label>
-                <input type="text" name="Username" class="form-control" id="Username">
+                <input type="text" Required name="Username" class="form-control" id="Username">
               </div>
               <div class="form-group">
                 <label for="Firstname">First Name</label>
-                <input type="text" name="fname" class="form-control" id="Firstname">
+                <input type="text" Required name="fname" class="form-control" id="Firstname">
               </div>
               <div class="form-group">
                 <label for="Lastname">Last Name</label>
-                <input type="text" name="lname" class="form-control" id="Lastname">
+                <input type="text" Required name="lname" class="form-control" id="Lastname">
               </div>
               <div class="form-group">
                 <label for="emailaddress">Email address</label>
-                <input type="email" name="email" class="form-control" id="emailaddress">
+                <input type="email" Required name="email" class="form-control" id="emailaddress">
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" class="form-control" id="password">
+                <input type="password" Required name="password" class="form-control" id="password">
               </div>
               <div class="form-group">
                 <label for="cpassword">Confirm Password</label>
-                <input type="password" name="cpassword" class="form-control" id="cpassword">
+                <input type="password" Required name="cpassword" class="form-control" id="cpassword">
               </div>
-              <button type="button" class="btn btn-primary">Sign Up</button>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
           </div>
         </div>
       </div>
   </nav>
+  <div class="container">
+      {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong>Message: </strong> {{ message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}</div>
   {% block body %}
   {% endblock body %}
   <footer class="blog-footer" style="text-align: center;">
