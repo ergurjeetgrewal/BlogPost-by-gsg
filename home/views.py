@@ -4,6 +4,7 @@ from .models import Contact
 from django.contrib import messages
 from blog.models import Post
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
 # Create your views here.
 
 
@@ -89,8 +90,23 @@ def handlesignup(request):
 
 
 def handlelogin(request):
-    return HttpResponse('logged in')
+    if request.method == "POST":
+        luser = request.POST['luser']
+        lpassword = request.POST['lpassword'] 
+        user = authenticate(username=luser,password=lpassword)
+        if user is not None:
+            login(request,user)
+            messages.success(request, "Logged in successfully")
+            return redirect('/')
+        else:
+            messages.error(request, "Invalid Credentials,Please try again")
+            return redirect('/')
+    return redirect('/')
 
 
 def handlelogout(request):
-    return HttpResponse('logged out')
+    if request.method=="POST":
+        logout(request)
+        messages.success(request, "successfully logged out")
+        return redirect('/')
+    return redirect('/')
