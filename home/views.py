@@ -57,12 +57,11 @@ def handlesignup(request):
         cpassword = request.POST['cpassword']
         # checking username exists
         auser = User.objects.filter(username=Username)
-        print(auser)
         if auser.count() != 0:
             messages.error(request, "Username Already exists")
             return redirect('/')
         aemail = User.objects.filter(email=email)
-        if aemail.count() != None:
+        if aemail.count() != 0:
             messages.error(request, "Email Already exists")
             return redirect('/')
         # error checking
