@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{params}}
+{% block title %}{{post.head_title}}
 {% endblock title %}
 {% block active4 %}active
 {% endblock active4 %}
@@ -12,7 +12,36 @@
 
         <p>{{post.content}}</p>
         <hr>
+</div>
+<div class="container">
+        <h2>Comments</h2>
+        {% if user.is_authenticated %}
+        <form action="/blog/postcomment" method="POST">
+                {% csrf_token %}
+                <label for="comment"><h4>Post:</h4></label>
+                <textarea type="text" rows="3" cols="3" class="form-control" id="comment" name='comment' required></textarea>
+                <input type="hidden" name="postSno" id="postSno" value="{{post.s_no}}">
+                <button class="btn btn-success mt-1" type="submit">POST</button>
+        </form>
+        {% else %}
+        <p><strong>Please signin/up for comment</strong></p>
+        <button type="button" class="btn btn-outline-danger mx-1" data-toggle="modal" data-target="#loginModal">
+                Login
+        </button>
+        <!-- signup trigger modal -->
+        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#signupModal">
+                Sign Up
+        </button>
+        {% endif %}
+        {% for item in comments %}
+        <div class="row my-3">
+                <div class="col-md-2 bg-warning">image here</div>
+                <div class="col-md-10 bg-success"><strong>{{Blogcomment.user}}</strong>
+                        <p>{{Blogcomment.comment}}</p>
+                </div>
         </div>
+        {% endfor %}
+</div>
 {% endblock body %}
 {% block addjs %}
 {% endblock addjs %}
