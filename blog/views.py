@@ -28,6 +28,6 @@ def postcomment(request):
         post=Post.objects.get(s_no=postSno)
         csave = Blogcomment(comment=comment,user=user,post=post)
         csave.save()
-        messages.success(request, "your post has been posted successfully")
+        messages.success(request, "your comment has been posted successfully")
     return redirect(f'/blog/{post.slug}')
 

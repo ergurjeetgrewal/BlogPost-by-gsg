@@ -6,6 +6,7 @@
 {% block addcss %}
 {% endblock addcss %}
 {% block body %}
+{% load static %}
 <div class="container my-3">
         <h2 class="blog-post-title">{{post.title}}</h2>
         <p class="blog-post-meta">{{post.timestamp}} by <a href="/about">{{post.author}}</a></p>
@@ -16,13 +17,20 @@
 <div class="container">
         <h2>Comments</h2>
         {% if user.is_authenticated %}
-        <form action="/blog/postcomment" method="POST">
-                {% csrf_token %}
-                <label for="comment"><h4>Post:</h4></label>
-                <textarea type="text" rows="3" cols="3" class="form-control" id="comment" name='comment' required></textarea>
-                <input type="hidden" name="postSno" id="postSno" value="{{post.s_no}}">
-                <button class="btn btn-success mt-1" type="submit">POST</button>
-        </form>
+        <div class="row">
+                <div class="col-md-6">
+                        <form action="/blog/postcomment" method="POST">
+                                {% csrf_token %}
+                                <label for="comment">
+                                        <h4>Post:</h4>
+                                </label>
+                                <textarea type="text" rows="3" cols="3" class="form-control" id="comment" name='comment'
+                                        required></textarea>
+                                <input type="hidden" name="postSno" id="postSno" value="{{post.s_no}}">
+                                <button class="btn btn-success mt-1" type="submit">POST</button>
+                        </form>
+                </div>
+        </div>
         {% else %}
         <p><strong>Please signin/up for comment</strong></p>
         <button type="button" class="btn btn-outline-danger mx-1" data-toggle="modal" data-target="#loginModal">
@@ -35,9 +43,12 @@
         {% endif %}
         {% for item in comments %}
         <div class="row my-3">
-                <div class="col-md-2 bg-warning">image here</div>
-                <div class="col-md-10 bg-success"><strong>{{Blogcomment.user}}</strong>
-                        <p>{{Blogcomment.comment}}</p>
+                <div class="col-md-1">
+                        <img class="rounded mx-auto d-block w-100 p-2" src='{% static "/blog/user_ico/user1.png" %}' alt="">
+                </div>
+                <div class="col-md-5">
+                        <strong>{{item.user.username}}</strong> at {{item.timestamp}}
+                        <p>{{item.comment}}</p>
                 </div>
         </div>
         {% endfor %}
