@@ -7,6 +7,7 @@
 {% endblock addcss %}
 {% block body %}
 {% load static %}
+{% load humanize %}
 <div class="container my-3">
         <h2 class="blog-post-title">{{post.title}}</h2>
         <p class="blog-post-meta">{{post.timestamp}} by <a href="/about">{{post.author}}</a></p>
@@ -47,7 +48,7 @@
                         <img class="rounded mx-auto d-block w-100 p-2" src='{% static "/blog/user_ico/user1.png" %}' alt="">
                 </div>
                 <div class="col-md-5">
-                        <strong>{{item.user.username}}</strong> at {{item.timestamp}}
+                        <strong>{{item.user.username}}</strong> <em>{{item.timestamp|naturaltime}}</em>
                         <p>{{item.comment}}</p>
                 </div>
         </div>
