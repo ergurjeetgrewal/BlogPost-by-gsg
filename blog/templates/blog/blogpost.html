@@ -8,6 +8,7 @@
 {% block body %}
 {% load static %}
 {% load humanize %}
+{% load get_dict %}
 <div class="container my-3">
         <h2 class="blog-post-title">{{post.title}}</h2>
         <p class="blog-post-meta">{{post.timestamp}} by <a href="/about">{{post.author}}</a></p>
@@ -16,17 +17,14 @@
         <hr>
 </div>
 <div class="container">
-        <h2>Comments</h2>
+        <h2>Comments({{comments|length}})</h2>
         {% if user.is_authenticated %}
         <div class="row">
                 <div class="col-md-6">
                         <form action="/blog/postcomment" method="POST">
                                 {% csrf_token %}
-                                <label for="comment">
-                                        <h4>Post:</h4>
-                                </label>
-                                <textarea type="text" rows="3" cols="3" class="form-control" id="comment" name='comment'
-                                        required></textarea>
+                                <input type="text" rows="3" cols="3" class="form-control" id="comment" name='comment'
+                                        required>
                                 <input type="hidden" name="postSno" id="postSno" value="{{post.s_no}}">
                                 <button class="btn btn-success mt-1" type="submit">POST</button>
                         </form>
@@ -45,15 +43,55 @@
         {% for item in comments %}
         <div class="row my-3">
                 <div class="col-md-1">
-                        <img class="rounded mx-auto d-block w-100 p-2" src='{% static "/blog/user_ico/user1.png" %}' alt="">
+                        <img class="rounded mx-auto d-block w-100 p-2" src='{% static "/blog/user_ico/user1.png" %}'
+                                alt="">
                 </div>
-                <div class="col-md-5">
-                        <strong>{{item.user.username}}</strong> <em>{{item.timestamp|naturaltime}}</em>
+                <div class="col-md-10">
+                        <strong>{{item.user.username}}</strong> <span class="badge badge-secondary"><em>{{item.timestamp|naturaltime}}</em></span>
                         <p>{{item.comment}}</p>
+                        {% for reply in repDict|get_val:item.sno %}
+                        <div class="row">
+                                <div class="col-md-1">
+                                        <img class="rounded mx-auto d-block w-100 p-2"
+                                                src='{% static "/blog/user_ico/user1.png" %}' alt="">
+                                </div>
+                                <div class="col-md-10">
+                                        <strong>{{reply.user}}</strong> <span class="badge badge-secondary"><em>{{reply.timestamp|naturaltime}}</span></em>
+                                        <p>{{reply.comment}}</p>
+                                </div>
+                        </div>
+                        {% endfor %}
+                        <div class="reply">
+                                <p>
+                                        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse"
+                                                data-target="#replybox{{item.sno}}" aria-expanded="false"
+                                                aria-controls="replybox{{item.sno}}">
+                                                Reply
+                                        </button>
+                                </p>
+                                <div class="collapse" id="replybox{{item.sno}}">
+                                        <div class="card card-body">
+                                                {% if user.is_authenticated %}
+                                                <form action="/blog/postcomment" method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="text" rows="3" cols="30" class="form-control"
+                                                                id="comment" name='comment' required>
+                                                        <input type="hidden" name="parentSno" id="postSno"
+                                                                value="{{item.sno}}">
+                                                        <input type="hidden" name="postSno" id="postSno"
+                                                                value="{{post.s_no}}">
+                                                        <button class="btn btn-sm btn-success mt-1"
+                                                                type="submit">Reply</button>
+                                                </form>
+                                                {% else %}
+                                                <p>Please Login/Signup to reply</p>
+                                                {% endif %}
+                                        </div>
+                                </div>
+                        </div>
                 </div>
         </div>
         {% endfor %}
-</div>
-{% endblock body %}
-{% block addjs %}
-{% endblock addjs %}
+        {% endblock body %}
+        {% block addjs %}
+        {% endblock addjs %}
